@@ -2,7 +2,6 @@
 using ContosoPizza.Services;
 using ContosoPizza.Models;
 using ContosoPizza.Helpers;
-
 namespace ContosoPizza.Controllers
 {
     [Route("api/[controller]")]
@@ -19,10 +18,16 @@ namespace ContosoPizza.Controllers
         }
 
         [HttpGet]
-        public ActionResult<List<Pizza>> GetAll()
+        public IQueryable<Pizza> GetItems([FromQuery] QueryParameters parameters)
         {
-            return pizzaService.GetAll();
+            return pizzaService.GetFiltered(parameters);
         }
+
+        //[HttpGet("filter")]
+        //public IQueryable<Pizza> GetFiltered([FromQuery] QueryParameters parameters)
+        //{
+        //    return pizzaService.GetFiltered(parameters);
+        //}
 
         [HttpGet("{id}")]
         public ActionResult<Pizza> Get(int id)
