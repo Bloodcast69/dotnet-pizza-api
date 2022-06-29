@@ -10,7 +10,6 @@ namespace ContosoPizza.Controllers
     public class UserController : ControllerBase
     {
         private UserService userService;
-
         public UserController(ApiContext context)
         {
             userService = new UserService(context);

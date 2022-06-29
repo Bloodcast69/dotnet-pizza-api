@@ -1,30 +1,32 @@
 ﻿using ContosoPizza.Helpers;
 using ContosoPizza.Models;
+using ContosoPizza.Repositories;
 
 namespace ContosoPizza.Services
 {
     public class UserService
     {
         private readonly ApiContext _context;
-        
+        private readonly UserRepository _userRepository;
         public UserService(ApiContext context)
         {
             _context = context;
+            _userRepository = new UserRepository(_context);
         }
 
         public List<User> GetAllUsers()
         {
-            return _context.Users.ToList();
+            return _userRepository.GetAllUsers().ToList();
         }
 
         public User ? GetUser(int id)
         {
-            return _context.Users.FirstOrDefault(user => user.Id == id);
+            return _userRepository.GetAllUsers().FirstOrDefault(user => user.Id == id);
         }
 
         public User ? GetUser(string email)
         {
-            return _context.Users.FirstOrDefault(user => user.Email == email);
+            return _userRepository.GetAllUsers().FirstOrDefault(user => user.Email == email);
         }
 
         public void CreateUser(User user)
@@ -65,7 +67,7 @@ namespace ContosoPizza.Services
 
         public bool UserExists(string email)
         {
-            return _context.Users.FirstOrDefault(user => user.Email == email) is not null;
+            return _userRepository.GetAllUsers().FirstOrDefault(user => user.Email == email) is not null;
         }
     }
 }

@@ -1,55 +1,27 @@
 ﻿using ContosoPizza.Helpers;
 using ContosoPizza.Models;
-using Microsoft.EntityFrameworkCore;
+using ContosoPizza.Repositories;
 
 namespace ContosoPizza.Services
 {
     public class PizzaService
     {
         private readonly ApiContext _context;
-
+        private readonly PizzaRepository _pizzaRepository;
         public PizzaService(ApiContext context)
         {
             _context = context;
+            _pizzaRepository = new PizzaRepository(_context);
         }
-
-        public List<Pizza> GetAll()
-        {
-            return _context.Pizzas.Include(x => x.Ingredients).ToList();
-        }
-
        
-        public IQueryable<Pizza> GetFiltered(QueryParameters parameters)
+        public List<Pizza> GetFiltered(QueryParameters parameters)
         {
-            var result = _context.Pizzas.Include(pizza => pizza.Ingredients).AsQueryable();
-
-
-            if (parameters.IsGlutenFree is not null)
-            {
-                result = result
-                      .Where(pizza => pizza.IsGlutenFree == parameters.IsGlutenFree);
-                    
-
-            }
-
-            if (parameters.Ingredient is not null)
-            {
-                result = result
-                     .Where(pizza => pizza.Ingredients.All(ingredient => ingredient.Name.ToLower() == parameters.Ingredient.ToLower()));
-            }
-
-            if (parameters.Name is not null)
-            {
-                result = result
-                     .Where(pizza => pizza.Name.ToLower().Contains(parameters.Name.ToLower()));
-            }
-
-            return result;
+            return _pizzaRepository.GetFiltered(parameters).ToList();
         }
 
         public Pizza ? Get(int id)
         {
-            return _context.Pizzas.FirstOrDefault(pizza => pizza.Id == id);
+            return _pizzaRepository.GetAll().FirstOrDefault(pizza => pizza.Id == id);
         }
 
         public void Add(Pizza pizza)

@@ -18,16 +18,10 @@ namespace ContosoPizza.Controllers
         }
 
         [HttpGet]
-        public IQueryable<Pizza> GetItems([FromQuery] QueryParameters parameters)
+        public List<Pizza> GetItems([FromQuery] QueryParameters parameters)
         {
             return pizzaService.GetFiltered(parameters);
         }
-
-        //[HttpGet("filter")]
-        //public IQueryable<Pizza> GetFiltered([FromQuery] QueryParameters parameters)
-        //{
-        //    return pizzaService.GetFiltered(parameters);
-        //}
 
         [HttpGet("{id}")]
         public ActionResult<Pizza> Get(int id)
